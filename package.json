@@ -1,0 +1,26 @@
+{
+  "name": "auth-crud",
+  "version": "1.0.0",
+  "description": "Auth crud with Express, NodeJS and MySQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Express",
+    "MySQL",
+    "NodeJs"
+  ],
+  "author": "CitlaliSC",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
