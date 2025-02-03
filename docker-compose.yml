@@ -7,9 +7,9 @@ services:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - mysql_data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
     expose:
-      - 3306
+      - "3306"
     environment:
       MYSQL_DATABASE: usersdb
       MYSQL_USER: admin
@@ -17,6 +17,37 @@ services:
       MYSQL_ROOT_PASSWORD: pass456
       SERVICE_TAGS: prod
       SERVICE_NAME: mysqldb
+    networks:
+      - internalnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  nodeapp:
+    container_name: nodeappcontainer
+    build: .
+    image: nodeapp:v1
+    volumes:
+      - ./nodeapp:/code
+    ports:
+      - "3000:3000"
+    expose: 
+      - "3000"
+    environment:
+      DB_HOST: mysqlauth
+      DB_PORT: 3306
+      DB_USER: 'admin'
+      DB_PASSWORD: 'pass123'
+      DB_NAME: usersdb
+      DB_CONNECTION_LIMIT: 20
+      SERVICE_TAGS: prod
+      SERVICE_NAME: nodeappservice
+      SERVER_PORT: 3000
+    depends_on:
+      mysqldb:
+        condition: service_healthy
     networks:
       - internalnet
 
