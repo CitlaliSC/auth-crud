@@ -28,14 +28,13 @@ export const getUsers = (req, res) => {
 export const createUser = (req, res) => {
     logger.info(`${req.method} ${req.originalUrl}, creating user`);
     database.query(QUERY.CREATE_USER, Object.values(req.body), (error, results) => {
-        if (!results) {
+        if (error) {
             logger.error(error.message);
             res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
                 .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `Error occurred`));
         } else {
-            const user = results[0][0];
             res.status(HttpStatus.CREATED.code)
-                .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `User created`, { user }));
+                .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `User created`, { id: results.insertId, ...req.body }));
         }
     });
 };
